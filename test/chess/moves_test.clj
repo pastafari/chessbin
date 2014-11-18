@@ -4,48 +4,49 @@
             [chess.board :refer :all]
             [chess.pieces :refer :all]))
 
+;; Board validations
+;; no piece on from square
+(expect false
+        (valid? start-state {:from [:a 4]
+                             :to [:a 5]
+                             :piece white-pawn}))
 
+;; Pawn moves
 ;; a3 in starting state is a valid move
 (expect true
-        (valid? start-state {:from [6 0]
-                             :to [5 0]
+        (valid? start-state {:from [:a 2]
+                             :to [:a 3]
                              :piece white-pawn}))
 
 
 ;; a4 in starting state is a valid move
 (expect true
-        (valid? start-state {:from [6 0]
-                             :to [4 0]
+        (valid? start-state {:from [:a 2]
+                             :to [:a 4]
                              :piece white-pawn}))
 
 
 
-;; a5 is not a valid move from starting state
+;; a5 in starting state is not a valid move
 (expect false
-        (valid? start-state {:from [6 0]
-                             :to [3 0]
+        (valid? start-state {:from [:a 2]
+                             :to [:a 5]
                              :piece white-pawn}))
 
 
-;; pawn can't move pawn from a3 to a6
+;; pawn can't move from a3 to a6
 (expect false
-        (valid? (add-piece empty-board [5 0] white-pawn)
-                {:from [5 0]
-                 :to [3 0]
+        (valid? (add-piece empty-board [:a 3] white-pawn)
+                {:from [:a 3]
+                 :to [:a 6]
                  :piece white-pawn}))
 
 
 ;; pawn can kill diagonally
 (expect true
         (valid? (-> empty-board
-                    (add-piece [5 0] white-pawn)
-                    (add-piece [4 1] black-knight))
-                {:from [5 0]
-                 :to [4 1]
+                    (add-piece [:a 4] white-pawn)
+                    (add-piece [:b 5] black-knight))
+                {:from [:a 4]
+                 :to [:b 5]
                  :piece white-pawn}))
-
-;; no piece on from square
-(expect false
-        (valid? start-state {:from [4 0]
-                             :to [6 1]
-                             :piece white-pawn}))

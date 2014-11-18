@@ -1,28 +1,19 @@
 (ns chess.core-test
   (:require [expectations :refer :all]
             [chess.core :refer :all]
-            [chess.board :refer [start-state]]
+            [chess.board :refer :all]
             [chess.pieces :refer :all]))
 
 ;; Fresh board - e4
 (expect (-> start-state
-            (assoc-in [6 4] nil)
-            (assoc-in [5 4] white-pawn))
-        (make-move start-state {:from [6 4]
-                                :to [5 4]
+            (remove-piece [:e 2])
+            (add-piece [:e 4] white-pawn))
+        (make-move start-state {:from [:e 2]
+                                :to [:e 4]
                                 :piece white-pawn}))
 
-;; Fresh board - Ng1-f3
-(expect (-> start-state
-            (assoc-in [7 6] nil)
-            (assoc-in [5 5] white-knight))
-        (make-move start-state {:from [7 6]
-                                :to [5 5]
-                                :piece white-knight}))
-
-
-;; Invalid move leads to exception
+;; Pawns cant move diagonally!
 (expect {:type :bad-move-exception}
-        (in (make-move start-state {:from [7 6]
-                                    :to [5 4]
-                                    :piece white-knight})))
+        (in (make-move start-state {:from [:a 2]
+                                    :to [:c 3]
+                                    :piece white-pawn})))

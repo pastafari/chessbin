@@ -1,12 +1,6 @@
 (ns chess.core
-  (:require [chess.moves :as moves]))
-
-
-(defn- update-board
-  [board move]
-  (-> board
-      (assoc-in (:from move) nil)
-      (assoc-in (:to move) (:piece move))))
+  (:require [chess.moves :as moves]
+            [chess.board :refer [update-board]]))
 
 
 (defn make-move
